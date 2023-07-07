@@ -1,0 +1,59 @@
+package idv.dave.passwordvalidation;
+
+import idv.dave.passwordvalidation.model.CharacterLimitRule;
+import idv.dave.passwordvalidation.model.PasswordLengthRule;
+import idv.dave.passwordvalidation.model.ValidationResult;
+import idv.dave.passwordvalidation.service.PasswordValidationServiceImpl;
+import idv.dave.passwordvalidation.service.PasswordValidator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class PasswordValidationServiceTest {
+
+    PasswordValidator validator;
+
+    PasswordValidationServiceImpl passwordValidationService;
+
+    @BeforeEach
+    public void before() {
+        validator = new PasswordValidator();
+        passwordValidationService = new PasswordValidationServiceImpl(validator);
+    }
+
+    @Test
+    public void testValidPasswords() {
+        List<String> validPasswords = List.of("abc123", "321abc", "dl0504", "0504dl");
+
+        for (String password : validPasswords) {
+            ValidationResult testResult = passwordValidationService.validatePassword(password);
+            assertTrue(testResult.isValid());
+            assertTrue(testResult.getMessages().isEmpty());
+        }
+    }
+
+    @Test
+    public void testInvalidPasswords() {
+        String lengthTooShortPassword = "abc1";
+        ValidationResult testResult = passwordValidationService.validatePassword(lengthTooShortPassword);
+
+        assertTestResult(testResult.isValid(), false, testResult.getMessages(), List.of(PasswordLengthRule.errorMessage));
+
+        String breakCharacterTypeLimit = "ABC123";
+        testResult = passwordValidationService.validatePassword(breakCharacterTypeLimit);
+        assertTestResult(testResult.isValid(), false, testResult.getMessages(), List.of(CharacterLimitRule.errorMessage));
+    }
+
+    private void assertTestResult(boolean testValid, boolean expectedValid, List<String> testMessages, List<String> expectedMessages) {
+        assertEquals(expectedValid, testValid);
+        assertFalse(testMessages.isEmpty());
+        assertEquals(testMessages.get(0), expectedMessages.get(0));
+    }
+
+}
