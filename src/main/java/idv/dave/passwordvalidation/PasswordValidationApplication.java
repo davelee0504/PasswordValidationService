@@ -1,13 +1,13 @@
-package idv.dave.passwordvalidationservice;
+package idv.dave.passwordvalidation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PasswordvalidationserviceApplication {
+public class PasswordValidationApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PasswordvalidationserviceApplication.class, args);
+		SpringApplication.run(PasswordValidationApplication.class, args);
 	}
 
 }
