@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Component
 public class PasswordValidator {
-    List<ValidationRule> validationRules = new ArrayList<>();
+    private final List<ValidationRule> validationRules = new ArrayList<>();
 
     //three default rules apply if no rule provided
     public PasswordValidator() {
