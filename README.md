@@ -23,7 +23,12 @@ IntelliJ
 # How to use
 ## RESTful API
 ```
-GET /password/validate?s=YOUR_PASSWORD_HERE
+POST /password/validate
+Content-Type: application/json
+
+{
+    "password": "YOUR CREDENTIAL HERE"
+}
 
 #Example of response
 {
