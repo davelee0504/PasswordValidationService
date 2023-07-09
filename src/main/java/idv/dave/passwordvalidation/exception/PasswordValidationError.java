@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class PasswordValidationError {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> resolveInternalError(Exception ex,
-                                                              HttpServletRequest request, HttpServletResponse response) {
-        if(ex instanceof JsonParseException || ex instanceof HttpMessageNotReadableException)
+    public ResponseEntity<ErrorResponse> resolveInternalError(Exception exception) {
+        if(exception instanceof JsonParseException || exception instanceof HttpMessageNotReadableException)
             return new ResponseEntity<>(new ErrorResponse("Invalid request body."), HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(new ErrorResponse("Consult tech support team for more details."), HttpStatus.INTERNAL_SERVER_ERROR);
