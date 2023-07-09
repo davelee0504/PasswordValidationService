@@ -9,6 +9,9 @@ import idv.dave.passwordvalidation.service.PasswordValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class PasswordValidationServiceTest {
 
     PasswordValidator validator;
 
+    @InjectMocks
     PasswordValidationServiceImpl passwordValidationService;
 
     @BeforeEach
@@ -49,16 +53,14 @@ public class PasswordValidationServiceTest {
         assertEquals(2, breakRulesResult.getMessages().size());
     }
 
-    @Test
-    public void testValidPasswords() {
+    @ParameterizedTest
+    @ValueSource(strings = {"abc123abc", "321abc", "davelee0504", "0504davelee"})
+    public void testValidPasswords(String password) {
         // Note: davelee0504 -> single 'e' character repeated is fine
-        List<String> validPasswords = List.of("abc123abc", "321abc", "davelee0504", "0504davelee");
 
-        for (String password : validPasswords) {
-            ValidationResult testResult = passwordValidationService.validatePassword(password);
-            assertTrue(testResult.isValid());
-            assertTrue(testResult.getMessages().isEmpty());
-        }
+        ValidationResult testResult = passwordValidationService.validatePassword(password);
+        assertTrue(testResult.isValid());
+        assertTrue(testResult.getMessages().isEmpty());
     }
 
     @Test
@@ -80,7 +82,7 @@ public class PasswordValidationServiceTest {
     private void assertTestResult(boolean testValid, boolean expectedValid, List<String> testMessages, List<String> expectedMessages) {
         assertEquals(expectedValid, testValid);
         assertFalse(testMessages.isEmpty());
-        assertEquals(testMessages.get(0), expectedMessages.get(0));
+        assertEquals(expectedMessages.size(), testMessages.size());
+        assertTrue(expectedMessages.containsAll(testMessages));
     }
-
 }
