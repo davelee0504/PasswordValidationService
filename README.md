@@ -1,8 +1,20 @@
+# Requirement 
+- Must consist of a mixture of lowercase letters and numerical digits only, with at least one of each.
+- Must be between 5 and 12 characters in length.
+- Must not contain any sequence of characters immediately followed by the same sequence.
+
+Note:
+Repeated sequence of characters mean two or more characters repeat in the password.
+e.g. 
+- daveleeee54 -> fail ('ee' is repeated)
+- davelee54 -> pass ('e' repeated is fine)
+
 # Technology Stack
 - Java 17 
 - Spring Boot v3.1.1
 - JUnit 
 - Mockito
+- Maven
 
 # IDE
 IntelliJ
@@ -49,7 +61,7 @@ public class NewValidationRule implements ValidationRule {
 
 # How to run tests
 ```
-mvn -Dtest="/*Test" test
+mvn test
 ```
 # Time taken
 ~12 hrs 
