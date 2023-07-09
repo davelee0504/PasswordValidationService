@@ -29,6 +29,27 @@ public class PasswordValidationServiceTest {
     }
 
     @Test
+    public void testValidationWithSpecifiedRules() {
+        String breakRulesPassword = "dVdV";
+        // default validator with 3 rules
+        ValidationResult breakRulesResult = validator.validate(breakRulesPassword);
+        assertFalse(breakRulesResult.isValid());
+        assertEquals(3, breakRulesResult.getMessages().size());
+
+        // starting with 1 rule only
+        validator = new PasswordValidator(new PasswordLengthRule());
+        breakRulesResult = validator.validate(breakRulesPassword);
+        assertFalse(breakRulesResult.isValid());
+        assertEquals(1, breakRulesResult.getMessages().size());
+
+        // with 2 rules, break length and character type
+        validator = new PasswordValidator(new PasswordLengthRule(), new CharacterLimitRule());
+        breakRulesResult = validator.validate(breakRulesPassword);
+        assertFalse(breakRulesResult.isValid());
+        assertEquals(2, breakRulesResult.getMessages().size());
+    }
+
+    @Test
     public void testValidPasswords() {
         // Note: davelee0504 -> single 'e' character repeated is fine
         List<String> validPasswords = List.of("abc123abc", "321abc", "davelee0504", "0504davelee");

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PasswordValidationServiceImpl implements PasswordValidateService{
-    PasswordValidator validator;
+    private final PasswordValidator validator;
 
     @Autowired
     public PasswordValidationServiceImpl(PasswordValidator validator) {
