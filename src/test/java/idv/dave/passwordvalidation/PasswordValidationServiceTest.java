@@ -2,6 +2,7 @@ package idv.dave.passwordvalidation;
 
 import idv.dave.passwordvalidation.model.CharacterLimitRule;
 import idv.dave.passwordvalidation.model.PasswordLengthRule;
+import idv.dave.passwordvalidation.model.RepeatedCharacterSequenceRule;
 import idv.dave.passwordvalidation.model.ValidationResult;
 import idv.dave.passwordvalidation.service.PasswordValidationServiceImpl;
 import idv.dave.passwordvalidation.service.PasswordValidator;
@@ -29,7 +30,8 @@ public class PasswordValidationServiceTest {
 
     @Test
     public void testValidPasswords() {
-        List<String> validPasswords = List.of("abc123", "321abc", "dl0504", "0504dl");
+        // Note: davelee0504 -> single 'e' character repeated is fine
+        List<String> validPasswords = List.of("abc123abc", "321abc", "davelee0504", "0504davelee");
 
         for (String password : validPasswords) {
             ValidationResult testResult = passwordValidationService.validatePassword(password);
@@ -42,12 +44,16 @@ public class PasswordValidationServiceTest {
     public void testInvalidPasswords() {
         String lengthTooShortPassword = "abc1";
         ValidationResult testResult = passwordValidationService.validatePassword(lengthTooShortPassword);
-
         assertTestResult(testResult.isValid(), false, testResult.getMessages(), List.of(PasswordLengthRule.errorMessage));
 
         String breakCharacterTypeLimit = "ABC123";
         testResult = passwordValidationService.validatePassword(breakCharacterTypeLimit);
         assertTestResult(testResult.isValid(), false, testResult.getMessages(), List.of(CharacterLimitRule.errorMessage));
+
+        // Note: daveleeee0504 -> 'ee' characters repeated should fail
+        String repeatedSequencesPassword = "daveleeee54";
+        testResult = passwordValidationService.validatePassword(repeatedSequencesPassword);
+        assertTestResult(testResult.isValid(), false, testResult.getMessages(), List.of(RepeatedCharacterSequenceRule.errorMessage));
     }
 
     private void assertTestResult(boolean testValid, boolean expectedValid, List<String> testMessages, List<String> expectedMessages) {
