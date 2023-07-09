@@ -4,8 +4,9 @@
 - Must not contain any sequence of characters immediately followed by the same sequence.
 
 Note:
-Repeated sequence of characters mean two or more characters repeat in the password.
-e.g. 
+Repeated sequence of characters mean two or more characters repeat in the password. 
+
+Please see the following examples.
 - daveleeee54 -> fail ('ee' is repeated)
 - davelee54 -> pass ('e' repeated is fine)
 
