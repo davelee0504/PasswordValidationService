@@ -27,13 +27,12 @@ public class PasswordValidationControllerTest {
     @Mock
     PasswordValidationServiceImpl mockedPasswordValidationService;
 
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void init() {
         PasswordValidationController passwordValidationController = new PasswordValidationController(mockedPasswordValidationService);
         mockMvc = MockMvcBuilders.standaloneSetup(passwordValidationController).build();
-        objectMapper = new ObjectMapper();
     }
 
     Credential credential = new Credential("abc123");
