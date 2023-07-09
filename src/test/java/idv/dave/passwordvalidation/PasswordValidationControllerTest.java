@@ -27,7 +27,7 @@ public class PasswordValidationControllerTest {
     @Mock
     PasswordValidationServiceImpl mockedPasswordValidationService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void init() {
