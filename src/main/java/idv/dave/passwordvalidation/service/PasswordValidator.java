@@ -12,7 +12,7 @@ import java.util.Objects;
 public class PasswordValidator {
     private final List<ValidationRule> validationRules = new ArrayList<>();
 
-    //three default rules apply if no rule provided
+    //three default rules apply if no rules provided
     public PasswordValidator() {
         this(new CharacterLimitRule(), new PasswordLengthRule(), new RepeatedCharacterSequenceRule());
     }

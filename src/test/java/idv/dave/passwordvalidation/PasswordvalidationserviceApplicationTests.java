@@ -1,18 +1,21 @@
 package idv.dave.passwordvalidation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import idv.dave.passwordvalidation.controller.PasswordValidationController;
 import idv.dave.passwordvalidation.model.CharacterLimitRule;
+import idv.dave.passwordvalidation.model.Credential;
 import idv.dave.passwordvalidation.model.PasswordLengthRule;
 import idv.dave.passwordvalidation.model.RepeatedCharacterSequenceRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,16 +32,22 @@ class PasswordValidationServiceApplicationTest {
 
     MockMvc mockMvc;
 
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+        objectMapper = new ObjectMapper();
     }
 
     @Test
     public void validPasswordIntegrationTest() throws Exception {
-        String password = "abc123";
-        String url = "/password/validate?s=" + password;
-        this.mockMvc.perform(get(url))
+        Credential credential = new Credential("abc123");
+        String url = "/password/validate";
+        this.mockMvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(credential))
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isValid").value("true"))
                 .andExpect(jsonPath("$.messages.length()").value("0"));
@@ -46,9 +55,12 @@ class PasswordValidationServiceApplicationTest {
 
     @Test
     public void invalidPasswordIntegrationTest() throws Exception {
-        String password = "CbCb";
-        String url = "/password/validate?s=" + password;
-        this.mockMvc.perform(get(url))
+        Credential credential = new Credential("cBcB");
+        String url = "/password/validate";
+        this.mockMvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(credential))
+                )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.isValid").value("false"))
                 .andExpect(jsonPath("$.messages.length()").value("3"))
