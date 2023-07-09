@@ -8,7 +8,7 @@ public class RepeatedCharacterSequenceRule implements ValidationRule {
     public final static String errorMessage = "Repeated character sequence found!";
     @Override
     public ValidationResult isValid(String password) {
-        String regex = "(.{1,})\\1";
+        String regex = "(.{2,})\\1";
         Pattern pattern = Pattern.compile(regex);
         boolean isRepeatedSequence = pattern.matcher(password).find();
 
