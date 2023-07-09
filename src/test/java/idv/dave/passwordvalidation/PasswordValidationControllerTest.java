@@ -40,7 +40,7 @@ public class PasswordValidationControllerTest {
     }
 
     @Test
-    public void shouldReturnOk() throws Exception {
+    public void expectOkWhenValidaPassword() throws Exception {
         when(mockedPasswordValidationService.validatePassword(password))
                 .thenReturn(new ValidationResult(true));
         String url = "/password/validate?s=";
@@ -48,7 +48,7 @@ public class PasswordValidationControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequest() throws Exception {
+    public void expectBadRequestWhenNoParameter() throws Exception {
         // remove the mandatory parameter s
         String url = "/password/validate";
         this.mockMvc.perform(get(url))
